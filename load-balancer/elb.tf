@@ -4,8 +4,9 @@ data "aws_availability_zones" "all" {}
 
 resource "aws_elb" "tomcat-elb" {
   name = "tomcat-elb"
-  subnets = ["${var.public_subnet_id}"]
-  #availability_zones = ["us-east-2a"]
+  #subnets = ["${var.public_subnet_id}"]
+  availability_zones = ["us-east-2a"]
+  security_groups = ["sg-e92a7c81"]
   #availability_zones = ["${data.aws_availability_zones.all.names}"] 
 /*
   access_logs {

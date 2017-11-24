@@ -1,18 +1,23 @@
 resource "aws_autoscaling_group" "asg" {
   lifecycle { create_before_destroy = true }
   vpc_zone_identifier = ["${var.public_subnet_id}"]
-  name = "asg-${var.lc_name}"
+  name = "asg"
   max_size = "${var.asg_max}"
   min_size = "${var.asg_min}"
   wait_for_elb_capacity = false
   force_delete = true
-  launch_configuration = "${var.lc_id}"
+  #launch_configuration = "${var.lc_id}"
   load_balancers = ["${var.elb_name}"]
   tag {
     key = "Name"
     value = "terraform_asg"
     propagate_at_launch = "true"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_bar" {
+  autoscaling_group_name = "${aws_autoscaling_group.asg.id}"
+  elb                    = "${var.elb_name}"
 }
 
 # Scale Up Policy and Alarm

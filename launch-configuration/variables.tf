@@ -19,9 +19,12 @@ variable "chef_nodename"{
 }
 
 variable "chef_server_url"{
-  default = "https://192.168.103.138/organizations/devops"
+  default = "https://192.168.103.228/organizations/devops"
 }
 
+variable "key_name"{
+  default = "project_key"
+}
 
 #variable "webapp_http_inbound_sg_id" {}
 #variable "webapp_ssh_inbound_sg_id" {}
