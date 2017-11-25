@@ -1,3 +1,4 @@
+
 resource "aws_autoscaling_group" "asg" {
   lifecycle { create_before_destroy = true }
   vpc_zone_identifier = ["${var.public_subnet_id}"]
@@ -6,7 +7,7 @@ resource "aws_autoscaling_group" "asg" {
   min_size = "${var.asg_min}"
   wait_for_elb_capacity = false
   force_delete = true
-  #launch_configuration = "${var.lc_id}"
+  launch_configuration = "${var.lc_id}"
   load_balancers = ["${var.elb_name}"]
   tag {
     key = "Name"
@@ -14,12 +15,12 @@ resource "aws_autoscaling_group" "asg" {
     propagate_at_launch = "true"
   }
 }
-
+/*
 resource "aws_autoscaling_attachment" "asg_attachment_bar" {
-  autoscaling_group_name = "${aws_autoscaling_group.asg.id}"
-  elb                    = "${var.elb_name}"
+  autoscaling_group_name = "autoscale"
+  elb                    = "tomcat-elb"
 }
-
+*/
 # Scale Up Policy and Alarm
 
 resource "aws_autoscaling_policy" "scale_up" {
@@ -78,3 +79,8 @@ output "asg_id" {
   value = "${aws_autoscaling_group.asg.id}"
 
 }
+/*
+output "asg_tag"{
+  value = "${aws_autoscaling_group.asg.tag['Name']}"
+}
+*/

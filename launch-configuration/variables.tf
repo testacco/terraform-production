@@ -26,6 +26,7 @@ variable "key_name"{
   default = "project_key"
 }
 
+variable "instance_id"{}
 #variable "webapp_http_inbound_sg_id" {}
 #variable "webapp_ssh_inbound_sg_id" {}
 #variable "webapp_outbound_sg_id" {}
