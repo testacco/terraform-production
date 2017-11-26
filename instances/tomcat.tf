@@ -86,7 +86,7 @@ resource "aws_instance" "tomcat" {
     node_name       = "${var.chef_nodename}"
     server_url      = "${var.chef_server_url}"
     recreate_client = true
-    user_name       = "maksym"
+    user_name       = "${var.chef_username}"
     user_key        = "${file("~/terraform-production/launch-configuration/mary1.pem")}"
     ssl_verify_mode = "verify_none"
 
@@ -138,7 +138,7 @@ provisioner "remote-exec" {
 */
 }
 
-
+/*
 resource "aws_ami_from_instance" "tomcat" {
   name               = "tomcat_ami"
   source_instance_id = "${aws_instance.tomcat.id}"
@@ -155,4 +155,4 @@ output "server_id"{
 output "instance_id"{
   value = "${aws_ami_from_instance.tomcat.id}"
 }
-
+*/

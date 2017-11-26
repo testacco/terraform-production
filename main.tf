@@ -24,7 +24,7 @@ module "instances" {
   db_user = "${var.db_user}"
   db_pass = "${var.db_pass}"
 }
-
+/*
 # load balancer for tomcat servers
 module "load-balancer" {
   source = "./load-balancer"
@@ -51,4 +51,4 @@ module "autoscaling-group" {
   lc_name = "${module.launch-configuration.lc_name}"
   elb_name = "${module.load-balancer.elb_name}"
 }
-
+*/

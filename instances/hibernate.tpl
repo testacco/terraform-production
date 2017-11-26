@@ -14,9 +14,6 @@
                 <property name="hibernate.connection.password">${db_pass}</property>
 
                 <property name="hibernate.hbm2ddl.auto">create</property>
-                <property name="current_session_context_class">thread</property>
-
-                <property name="show_sql">true</property>
 
                 <mapping class="com.softserveinc.edu.oms.domain.entities.Role" />
                 <mapping class="com.softserveinc.edu.oms.domain.entities.Region" />

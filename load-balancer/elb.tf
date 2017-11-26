@@ -14,7 +14,7 @@ resource "aws_elb" "tomcat-elb" {
     lb_port = 80
     lb_protocol = "http"
   }
-
+/*
   listener {
     instance_port = 8000
     instance_protocol = "http"
@@ -22,7 +22,7 @@ resource "aws_elb" "tomcat-elb" {
     lb_protocol = "https"
     #ssl_certificate_id = ""
   }
-  
+*/
   instances = ["${var.servers_id}"]
   cross_zone_load_balancing = true
   idle_timeout = 40
