@@ -1,20 +1,8 @@
-/*
-data "aws_autoscaling_group" "asg" {
-  tag {
-    Name   = "terraform-asg"
-  }
-}
-*/
-resource "aws_ami_from_instance" "tomcat" {
-  name               = "tomcat_ami"
-  source_instance_id = "${var.instance_id}"
-}
-
 resource "aws_launch_configuration" "lc" {
   lifecycle { create_before_destroy = true }
   #name = "launch_config"
   #image_id = "${var.image_id}"
-  image_id = "${aws_ami_from_instance.tomcat.id}"
+  image_id = "${var.instance_id}"
   instance_type = "${var.instance_type}"
   security_groups = ["sg-e92a7c81"
   #  "${var.webapp_http_inbound_sg_id}",
@@ -22,14 +10,7 @@ resource "aws_launch_configuration" "lc" {
   #  "${var.webapp_outbound_sg_id}"
   ] 
   key_name = "${var.key_name}"
-
-  associate_public_ip_address = true
-/*  user_data = <<-EOF
-  #!/bin/bash
-  sudo yum install httpd -y
-  sudo systemctl start httpd
-  EOF
-*/
+  associate_public_ip_address = false
 
 /*
   provisioner "remote-exec"{

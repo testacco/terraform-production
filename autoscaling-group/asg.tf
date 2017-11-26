@@ -27,7 +27,7 @@ resource "aws_autoscaling_policy" "scale_up" {
   name = "terraform_asg_scale_up"
   scaling_adjustment = 2
   adjustment_type = "ChangeInCapacity"
-  cooldown = 300
+  cooldown = 60
   autoscaling_group_name = "${aws_autoscaling_group.asg.name}"
 }
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
@@ -54,7 +54,7 @@ resource "aws_autoscaling_policy" "scale_down" {
   name = "terraform_asg_scale_down"
   scaling_adjustment = -1
   adjustment_type = "ChangeInCapacity"
-  cooldown = 600
+  cooldown = 60
   autoscaling_group_name = "${aws_autoscaling_group.asg.name}"
 }
 

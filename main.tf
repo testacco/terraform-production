@@ -22,7 +22,7 @@ module "instances" {
   #db_name = "${module.rds.db_instance_name}"
 }
 
-
+/*
 # load balancer for tomcat servers
 module "load-balancer" {
   source = "./load-balancer"
@@ -52,4 +52,4 @@ module "autoscaling-group" {
   lc_name = "${module.launch-configuration.lc_name}"
   elb_name = "${module.load-balancer.elb_name}"
 }
-
+*/
