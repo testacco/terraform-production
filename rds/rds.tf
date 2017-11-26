@@ -1,11 +1,9 @@
 
 resource "aws_rds_cluster" "db_cluster" {
   cluster_identifier      = "aurora-cluster"
-  #availability_zones      = ["us-east-2a"]
-  
-  database_name           = "mydb"
-  master_username         = "mary"
-  master_password         = "barfoo268"
+  database_name           = "${var.db_name}"
+  master_username         = "${var.db_user}"
+  master_password         = "${var.db_pass}"
   vpc_security_group_ids = ["sg-58500d30"]
   #backup_retention_period = 5
   #preferred_backup_window = "07:00-09:00"
@@ -39,11 +37,17 @@ output "db_instance_port"{
   value = "${aws_db_instance.instance.port}"
 }
 
-output "db_instance_name"{
-  value = "${aws_db_instance.instance.name}"
+output "db_name"{
+  value = "${aws_db_cluster.db_cluster.database_name}"
 }
 */
 
 output "reader_endpoint"{
   value = "${aws_rds_cluster.db_cluster.reader_endpoint}"
 }
+
+output "cluster_endpoint"{
+  value = "${aws_rds_cluster.db_cluster.endpoint}"
+}
+
+

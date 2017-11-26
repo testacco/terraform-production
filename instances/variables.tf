@@ -13,9 +13,10 @@ variable "chef_nodename"{ default = "tomcat" }
 variable "chef_server_url"{ default = "https://192.168.103.228/organizations/devops" }
 
 variable "key_name"{}
-#variable "db_ip"{}
-#variable "db_name"{}
+variable "db_user"{}
+variable "db_pass"{}
+variable "db_name"{}
 #variable "public_subnet_id"{}
 #variable "webapp_http_inbound_sg_id"{}
-#variable "reader_endpoint"{}
+variable "cluster_endpoint"{}
 

@@ -3,11 +3,13 @@ provider "aws" {
   shared_credentials_file = "~/.aws/credentials/credentials"
   region = "${var.zone}"
 }
-/*
+
 module "rds"{
   source = "./rds"
+  db_name = "${var.db_name}"
+  db_user = "${var.db_user}"
+  db_pass = "${var.db_pass}"
 }
-*/
 
 module "instances" {
   source = "./instances"
@@ -17,12 +19,12 @@ module "instances" {
   #ssh_from_bastion_sg_id = "${module.site.ssh_from_bastion_sg_id}"
   #web_access_from_nat_sg_id = "${module.site.web_access_from_nat_sg_id}"
   key_name = "${var.key_name}"
-  #reader_endpoint = "${var.reader_endpoint}"
-  #db_ip = "${module.rds.db_instance_ip}"
-  #db_name = "${module.rds.db_instance_name}"
+  cluster_endpoint = "${module.rds.cluster_endpoint}"
+  db_name = "${var.db_name}"
+  db_user = "${var.db_user}"
+  db_pass = "${var.db_pass}"
 }
 
-/*
 # load balancer for tomcat servers
 module "load-balancer" {
   source = "./load-balancer"
@@ -30,7 +32,6 @@ module "load-balancer" {
   public_subnet_id = "${var.public_subnet_id}"
   #http_inbound_sg_id = "${module.site.webapp_http_inbound_sg_id}"
 }
-
 
 # creating template for instance launch 
 module "launch-configuration" {
@@ -42,8 +43,6 @@ module "launch-configuration" {
   instance_id = "${module.instances.instance_id}"
 }
 
-
-
 # creating autoscaling-group for tomcat servers
 module "autoscaling-group" {
   source = "./autoscaling-group"
@@ -52,4 +51,4 @@ module "autoscaling-group" {
   lc_name = "${module.launch-configuration.lc_name}"
   elb_name = "${module.load-balancer.elb_name}"
 }
-*/
+

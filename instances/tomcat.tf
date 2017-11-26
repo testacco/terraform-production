@@ -1,3 +1,15 @@
+data "template_file" "hibernate" {
+  template = "${file("/home/centos/terraform-production/instances/hibernate.tpl")}"
+
+  vars {
+    db_url = "${var.cluster_endpoint}",
+    db_name = "${var.db_name}",
+    db_user = "${var.db_user}",
+    db_pass = "${var.db_pass}"
+  }
+}
+
+
 resource "aws_instance" "tomcat" {
   count = 1  
   ami = "${var.ami}" 
@@ -10,7 +22,7 @@ resource "aws_instance" "tomcat" {
   }
 
   timeouts {delete = "5m"}
-/*
+
   provisioner "file" {
     source      = "/home/centos/terraform-production/instances/tomcat.sh"
     destination = "/tmp/tomcat.sh"
@@ -24,12 +36,8 @@ resource "aws_instance" "tomcat" {
 
   provisioner "remote-exec" {
     inline = [
-      #"export DATABASE_URL=${var.db_ip}",
       "chmod +x /tmp/tomcat.sh",
       "bash /tmp/tomcat.sh",
-      #"export DATABASE_URL=${var.db_ip}",
-      #"cd /usr/share/tomcat/webapps/",
-      #"wget http://192.168.103.149:8081/nexus/content/repositories/redirect?r=snapshots&g=com.softserveinc&a=edu&v=LATEST/edu-1.0.0-BUILD.war",
     ]
     connection ={
       type = "ssh"
@@ -39,10 +47,9 @@ resource "aws_instance" "tomcat" {
     }
   }
 
-
-provisioner "file" {
-    source      = "/home/centos/terraform-production/instances/edu.war"
-    destination = "/usr/share/tomcat/webapps/edu.war"
+  provisioner "file" {
+    source      = "~/edu.war"
+    destination = "/tmp/edu.war"
     connection ={
       type = "ssh"
       user = "${var.user}"
@@ -50,19 +57,17 @@ provisioner "file" {
       private_key = "${file("~/.ssh/key1.pem")}"
    }
   }
-*/
 
-
-provisioner "remote-exec"{
-  inline = ["export DATA=/path/data"]
-  #inline = ["sudo sh -c 'sudo echo export DATA=/path/data >> ~/.bashrc'"]
-  connection ={
-    type     = "ssh"
-    user     = "${var.user}"
-    agent = false
-    private_key = "${file("~/.ssh/key1.pem")}"
+  provisioner "remote-exec" {
+    inline = ["sudo mv /tmp/edu.war /usr/share/tomcat/webapps/edu.war",]
+    connection ={
+      type = "ssh"
+      user = "${var.user}"
+      agent = false
+      private_key = "${file("~/.ssh/key1.pem")}"
+    }
   }
-}
+
 
 /*
   provisioner "remote-exec"{
@@ -73,9 +78,7 @@ provisioner "remote-exec"{
       agent = false
       private_key = "${file("~/.ssh/key1.pem")}"
     }
-
-}
-
+  }
 
   provisioner "chef"{
     environment     = "_default"
@@ -95,8 +98,47 @@ provisioner "remote-exec"{
     }
   }
 */
-}
+
+  provisioner "file" {
+    content = "${data.template_file.hibernate.rendered}"
+    destination = "/tmp/hibernate.cfg.xml"
+    connection{
+      type     = "ssh"
+      user     = "${var.user}"
+      agent = false
+      private_key = "${file("~/.ssh/key1.pem")}"
+    }
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo rm -rf /usr/share/tomcat/webapps/edu/WEB-INF/hibernate.cfg.xml",
+      "sudo mv /tmp/hibernate.cfg.xml /usr/share/tomcat/webapps/edu/WEB-INF/hibernate.cfg.xml",]
+    connection ={
+      type = "ssh"
+      user = "${var.user}"
+      agent = false
+      private_key = "${file("~/.ssh/key1.pem")}"
+    }
+  }
+
 /*
+provisioner "remote-exec" {
+  inline= [
+     "echo \"${template_file.hibernate.rendered}\" > hibernate.cfg.xml",
+     "sudo cp hibernate.cfg.xml /usr/share/tomcat/webapps/edu/WEB-INF/hibernate.cfg.xml"
+    ]
+   connection{
+      type     = "ssh"
+      user     = "${var.user}"
+      agent = false
+      private_key = "${file("~/.ssh/key1.pem")}"
+   }
+}
+*/
+}
+
+
 resource "aws_ami_from_instance" "tomcat" {
   name               = "tomcat_ami"
   source_instance_id = "${aws_instance.tomcat.id}"
@@ -113,4 +155,4 @@ output "server_id"{
 output "instance_id"{
   value = "${aws_ami_from_instance.tomcat.id}"
 }
-*/
+
