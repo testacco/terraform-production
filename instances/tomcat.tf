@@ -1,4 +1,4 @@
-data "template_file" "hibernate" {
+/*data "template_file" "hibernate" {
   template = "${file("/home/centos/terraform-production/instances/hibernate.tpl")}"
 
   vars {
@@ -8,7 +8,7 @@ data "template_file" "hibernate" {
     db_pass = "${var.db_pass}"
   }
 }
-
+*/
 
 resource "aws_instance" "tomcat" {
   count = 1  
@@ -98,7 +98,7 @@ resource "aws_instance" "tomcat" {
     }
   }
 */
-
+/*
   provisioner "file" {
     content = "${data.template_file.hibernate.rendered}"
     destination = "/tmp/hibernate.cfg.xml"
@@ -121,7 +121,7 @@ resource "aws_instance" "tomcat" {
       private_key = "${file("~/.ssh/key1.pem")}"
     }
   }
-
+*/
 /*
 provisioner "remote-exec" {
   inline= [

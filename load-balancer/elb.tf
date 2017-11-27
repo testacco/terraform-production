@@ -5,8 +5,8 @@
 resource "aws_elb" "tomcat-elb" {
   name = "tomcat-elb"
   subnets = ["${var.public_subnet_id}"]
-  #security_groups = ["sg-f8095b90"]
   security_groups = ["${var.security_groups}"]
+  internal = false
 
   listener {
     instance_port = 8080
@@ -20,7 +20,7 @@ resource "aws_elb" "tomcat-elb" {
     instance_protocol = "http"
     lb_port = 443
     lb_protocol = "https"
-    #ssl_certificate_id = ""
+    ssl_certificate_id = "/home/centos/terraform-production/helper_scripts/ssl/nginx-selfsigned.crt"
   }
 */
   instances = ["${var.servers_id}"]
